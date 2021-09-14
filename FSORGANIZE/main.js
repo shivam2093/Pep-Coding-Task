@@ -19,6 +19,6 @@ case "help":
      helpObj.helpnx();
     break;
          default:
-        console('WRONG COMMAND');
+        console.log('WRONG COMMAND');
         break;
 }
