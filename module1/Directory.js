@@ -61,6 +61,7 @@ let process = require('process')
 // }
 
 // }
+
 // July-24 th class FILE SYSTEM AND PATH TASK
 let getInput = process.argv.slice(2);
 let first = getInput[0];
@@ -76,8 +77,8 @@ if(isModulePresent){
 }
 else
 {
-
     fs.mkdirSync(jPath);
+
     let otherInput = getInput.slice(1, 4);
     for(let i = 0; i < otherInput.length; i++){
         let prevousPathJoin = path.join(jPath, otherInput[i]);
@@ -87,8 +88,10 @@ else
         for(let j = 1; j <= 5; j++){
 
             let aginJoinPreviousPath = path.join(prevousPathJoin, "module"+[j]);
-            let fileWrite = fs.writeFileSync(aginJoinPreviousPath,"Hello Now you have created Success");
 
+            let fileWrite = fs.writeFileSync(aginJoinPreviousPath,"Hello Now you have created Success");
+            
+            
         console.log('modules',j,'created')           
 
 

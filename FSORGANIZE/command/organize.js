@@ -12,12 +12,9 @@ let types = {
 
 }
 
-
-//console.log(types)
 function getKey(prop){
 
     for(let key in types){
-
             if(types[key].includes(prop)){  
                 return key;    
             }
@@ -25,85 +22,63 @@ function getKey(prop){
 }
 
 
+function copytoDest(untilRandom, fromRandom){
+    let srcPath = untilRandom
+    let destPath = fromRandom
+    let toCopyFrom = path.basename(srcPath);
+    let finalJoin = path.join(destPath,toCopyFrom)
+    fs.copyFileSync(srcPath,finalJoin);
+}
+
+
 function name(src) {
-    
-    //console.log('organize command executed',src)
-
 // code
-
 let allFilesArray = fs.readdirSync(src);
-for(let i = 0; i < allFilesArray.length; i++){
-//to get an extension
-let nameOfEach = allFilesArray[i];
-let fullpath = path.join(src , nameOfEach);
 
-// check  is it file or folder
- //console.log(fullpath)
-let statOffile = fs.lstatSync(fullpath);
+    for(let i = 0; i < allFilesArray.length; i++){
+        //to get an extension
+        let nameOfEach = allFilesArray[i];
+        let fullpath = path.join(src , nameOfEach);
 
-if(statOffile.isFile()){
+        // check  is it file or folder
+        let statOffile = fs.lstatSync(fullpath);
 
-    let ext = path.extname(fullpath);
-  let nameOfDirectory =  getKey(ext.slice(1))
+        if(statOffile.isFile()){
 
-  if(nameOfDirectory == undefined){
+            let ext = path.extname(fullpath);
+        let nameOfDirectory =  getKey(ext.slice(1))
 
-   let forOther = path.join(src,'Other')
-   let modulePres = fs.existsSync(forOther)
-   if(modulePres) {
-    //console.log(paths,"folder already present")
-    let srcPath = fullpath    
-    let destPath = forOther
-  
-    let toCopyFrom = path.basename(srcPath);
-    let finalJoin = path.join(destPath,toCopyFrom)
-    fs.copyFileSync(srcPath,finalJoin);
-    continue;
-}
-else{
-   fs.mkdirSync(forOther)
-   let srcPath = fullpath    
-   let destPath = forOther
-   let toCopyFrom = path.basename(srcPath);
-   let finalJoin = path.join(destPath,toCopyFrom)
-   fs.copyFileSync(srcPath,finalJoin);
-}
-  } else {
+            if(nameOfDirectory == undefined){
 
-  //JOIN THE PATH
-  let paths = path.join(src,nameOfDirectory)
-  let modulePres = fs.existsSync(paths)
-
-        if(modulePres) {
-        //console.log(paths,"folder already present")
-        let srcPath = fullpath    
-        let destPath = paths
-      
-        let toCopyFrom = path.basename(srcPath);
-        let finalJoin = path.join(destPath,toCopyFrom)
-        fs.copyFileSync(srcPath,finalJoin);
-        continue;
-    } else {
-     fs.mkdirSync(paths);
-    let srcPath = fullpath    
-    let destPath = paths
-  
-    let toCopyFrom = path.basename(srcPath);
-    let finalJoin = path.join(destPath,toCopyFrom)
-    fs.copyFileSync(srcPath,finalJoin);
-
-
+            let forOther = path.join(src,'Other')
+            let modulePres = fs.existsSync(forOther)
+            if(modulePres) {
+                copytoDest(fullpath,forOther)
+                continue;
+            }
+        else {
+        fs.mkdirSync(forOther)
+        copytoDest(fullpath,forOther)
         }
-        }
-    }
+        } else {
+
+        //JOIN THE PATH
+        let paths = path.join(src,nameOfDirectory)
+        let modulePres = fs.existsSync(paths)
+
+                if(modulePres) {
+                copytoDest(fullpath,paths)
+                continue;
+            } else {
+            fs.mkdirSync(paths);
+            copytoDest(fullpath,paths)
+                }
+                }
+            }
 }
 
 
 }
-
-    
-    
-    
     module.exports = {
         orx : name
     }
